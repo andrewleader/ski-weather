@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PointInfo from '../models/pointInfo';
-import { ForecastData, ForecastFullDay } from '../models/forecasts';
+import { ForecastData, ForecastFullDay, ForecastPeriod } from '../models/forecasts';
 import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 
 const PrevSnowfallView = (props:{
@@ -34,8 +34,22 @@ const ForecastFullDayView = (props:{
   );
 }
 
+const ForecastPeriodView = (props:{
+  period: ForecastPeriod
+}) => {
+  return (
+    <div>
+      <p>{props.period.source.shortForecast}</p>
+      <p>❄ {props.period.snowAccumulation.toString()}</p>
+      <p>🌡 {props.period.source.temperature}</p>
+      <p>💨 {props.period.source.windSpeed}</p>
+    </div>
+  );
+}
+
 const Forecast = (props:{
-  pointInfo: PointInfo
+  pointInfo: PointInfo,
+  showNights?: boolean
 }) => {
   const [forecast, setForecast] = React.useState<ForecastData | undefined>();
 
@@ -66,13 +80,34 @@ const Forecast = (props:{
                 </TableCell>
               ))}
             </TableRow>
-            <TableRow>
-              {forecast?.days.map(day => (
-                <TableCell>
-                  <ForecastFullDayView day={day}/>
-                </TableCell>
-              ))}
-            </TableRow>
+            {props.showNights ? (
+              <>
+                <TableRow>
+                  {forecast?.days.map(day => (
+                    <TableCell>
+                      {day.day && (
+                        <ForecastPeriodView period={day.day}/>
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+                <TableRow>
+                  {forecast?.days.map(day => (
+                    <TableCell>
+                      <ForecastPeriodView period={day.night}/>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </>
+            ) : (
+              <TableRow>
+                {forecast?.days.map(day => (
+                  <TableCell>
+                    <ForecastFullDayView day={day}/>
+                  </TableCell>
+                ))}
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
