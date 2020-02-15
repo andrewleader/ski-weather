@@ -47,10 +47,12 @@ export class ForecastFullDay {
   name: string;
   day?: ForecastPeriod;
   night: ForecastPeriod;
+  prev?: ForecastFullDay;
 
-  constructor(day: ForecastPeriod | undefined, night: ForecastPeriod) {
+  constructor(day: ForecastPeriod | undefined, night: ForecastPeriod, prevForecastFullDay?: ForecastFullDay) {
     this.day = day;
     this.night = night;
+    this.prev = prevForecastFullDay;
 
     this.name = day ? day.source.name : night.source.name;
 
@@ -58,6 +60,17 @@ export class ForecastFullDay {
     const dayHigh = day ? day.snowAccumulation.high : 0;
 
     this.snowAccumulation = new SnowAccumulation(dayLow + night.snowAccumulation.low, dayHigh + night.snowAccumulation.high);
+  }
+
+  getSource() {
+    return this.day?.source ?? this.night.source;
+  }
+
+  getTemperature() {
+    if (this.prev) {
+      return `${this.prev.night.source.temperature}°-${this.day!.source.temperature}°`;
+    }
+    return `${this.getSource().temperature}°`;
   }
 }
 
@@ -78,7 +91,11 @@ export class ForecastData {
       if (period.source.isDaytime) {
         dayPeriod = period;
       } else {
-        days.push(new ForecastFullDay(dayPeriod, period));
+        let prev:ForecastFullDay|undefined = undefined;
+        if (days.length > 0) {
+          prev = days[days.length - 1];
+        }
+        days.push(new ForecastFullDay(dayPeriod, period, prev));
       }
     });
 

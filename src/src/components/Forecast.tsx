@@ -8,7 +8,9 @@ const ForecastFullDayView = (props:{
   return (
     <div>
       <h5>{props.day.name}</h5>
+      <p>{props.day.getSource().shortForecast}</p>
       <p>{props.day.snowAccumulation.toString()}</p>
+      <p>{props.day.getTemperature()}</p>
     </div>
   );
 }
