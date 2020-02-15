@@ -19,6 +19,10 @@ class SnowAccumulation {
     }
     return `${this.low}-${this.high}"`;
   }
+
+  static combine(first:SnowAccumulation, second:SnowAccumulation) {
+    return new SnowAccumulation(first.low + second.low, first.high + second.high);
+  }
 }
 
 export class ForecastPeriod {
@@ -48,11 +52,24 @@ export class ForecastFullDay {
   day?: ForecastPeriod;
   night: ForecastPeriod;
   prev?: ForecastFullDay;
+  overnight?: SnowAccumulation;
+  oneDay?: SnowAccumulation;
+  twoDays?: SnowAccumulation;
 
   constructor(day: ForecastPeriod | undefined, night: ForecastPeriod, prevForecastFullDay?: ForecastFullDay) {
     this.day = day;
     this.night = night;
     this.prev = prevForecastFullDay;
+
+    if (prevForecastFullDay) {
+      this.overnight = prevForecastFullDay.night.snowAccumulation;
+      if (prevForecastFullDay.day) {
+        this.oneDay = prevForecastFullDay.snowAccumulation;
+        if (prevForecastFullDay.oneDay) {
+          this.twoDays = SnowAccumulation.combine(this.oneDay, prevForecastFullDay.oneDay);
+        }
+      }
+    }
 
     this.name = day ? day.source.name : night.source.name;
 

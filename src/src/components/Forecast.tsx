@@ -3,6 +3,24 @@ import PointInfo from '../models/pointInfo';
 import { ForecastData, ForecastFullDay } from '../models/forecasts';
 import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 
+const PrevSnowfallView = (props:{
+  day: ForecastFullDay
+}) => {
+  return (
+    <div>
+      {props.day.twoDays && (
+        <p><strong>Two days: </strong>{props.day.twoDays.toString()}</p>
+      )}
+      {props.day.oneDay && (
+        <p><strong>One day: </strong>{props.day.oneDay.toString()}</p>
+      )}
+      {props.day.overnight && (
+        <p><strong>Overnight: </strong>{props.day.overnight.toString()}</p>
+      )}
+    </div>
+  );
+}
+
 const ForecastFullDayView = (props:{
   day: ForecastFullDay
 }) => {
@@ -41,6 +59,13 @@ const Forecast = (props:{
             </TableRow>
           </TableHead>
           <TableBody>
+            <TableRow>
+              {forecast?.days.map(day => (
+                <TableCell>
+                  <PrevSnowfallView day={day}/>
+                </TableCell>
+              ))}
+            </TableRow>
             <TableRow>
               {forecast?.days.map(day => (
                 <TableCell>
