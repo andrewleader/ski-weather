@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import PointInfo from '../models/pointInfo';
 import { ForecastData, ForecastFullDay } from '../models/forecasts';
+import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 
 const ForecastFullDayView = (props:{
   day: ForecastFullDay
 }) => {
   return (
     <div>
-      <h5>{props.day.name}</h5>
       <p>{props.day.getSource().shortForecast}</p>
       <p>❄ {props.day.snowAccumulation.toString()}</p>
       <p>🌡 {props.day.getTemperature()}</p>
@@ -31,9 +31,26 @@ const Forecast = (props:{
 
   return (
     <div>
-      {forecast?.days.map(day => (
-        <ForecastFullDayView day={day}/>
-      ))}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {forecast?.days.map(day => (
+                <TableCell><strong>{day.name}</strong></TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {forecast?.days.map(day => (
+                <TableCell>
+                  <ForecastFullDayView day={day}/>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
