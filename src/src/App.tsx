@@ -10,6 +10,7 @@ import {
 import { makeStyles, AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import FindGrid from './components/FindGrid';
+import Forecast from './components/Forecast';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,7 +52,7 @@ const App = () => {
             <FindGrid/>
           </Route>
           <Route path="/">
-
+            <Forecast pointInfo={{cwa: "SEW", gridX: 151, gridY: 53}}/>
           </Route>
         </Switch>
       </div>
