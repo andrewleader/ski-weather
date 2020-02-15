@@ -48,8 +48,8 @@ const Forecast = (props:{
   }, [props.pointInfo]);
 
   return (
-    <div>
-      <TableContainer component={Paper}>
+    <div style={{overflowX: "auto"}}>
+      <TableContainer component={Paper} style={{minWidth: "1200px"}}>
         <Table>
           <TableHead>
             <TableRow>

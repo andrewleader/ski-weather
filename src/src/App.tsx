@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  locationHeader: {
+    marginTop: "24px"
+  }
 }));
 
 const App = () => {
@@ -52,10 +55,10 @@ const App = () => {
             <FindGrid/>
           </Route>
           <Route path="/">
-            <Typography variant="h4">Snoqualmie Pass</Typography>
+            <Typography variant="h4" className={classes.locationHeader}>Snoqualmie Pass</Typography>
             <Forecast pointInfo={{cwa: "SEW", gridX: 151, gridY: 53}}/>
             
-            <Typography variant="h4">Crystal</Typography>
+            <Typography variant="h4" className={classes.locationHeader}>Crystal</Typography>
             <Forecast pointInfo={{cwa: "SEW", gridX: 144, gridY: 30}}/>
           </Route>
         </Switch>
