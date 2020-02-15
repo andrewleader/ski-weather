@@ -52,7 +52,11 @@ const App = () => {
             <FindGrid/>
           </Route>
           <Route path="/">
+            <Typography variant="h4">Snoqualmie Pass</Typography>
             <Forecast pointInfo={{cwa: "SEW", gridX: 151, gridY: 53}}/>
+            
+            <Typography variant="h4">Crystal</Typography>
+            <Forecast pointInfo={{cwa: "SEW", gridX: 144, gridY: 30}}/>
           </Route>
         </Switch>
       </div>
