@@ -31,6 +31,19 @@ const App = () => {
   const classes = useStyles();
 
   const [showNights, setShowNights] = React.useState<boolean>(false);
+  const [snoqualmie, setSnoqualmie] = React.useState<boolean>(true);
+  const [crystal, setCrystal] = React.useState<boolean>(false);
+  const [stevens, setStevens] = React.useState<boolean>(false);
+
+  const LocationSwitch = (props:{
+    title: string,
+    checked: boolean,
+    setChecked: (b:boolean) => void
+  }) => {
+    return (
+      <FormControlLabel control={<MaterialSwitch checked={props.checked} onChange={event => props.setChecked(event.target.checked)}/>} label={props.title}/>
+    );
+  }
 
   return (
     <Router>
@@ -58,11 +71,31 @@ const App = () => {
           </Route>
           <Route path="/">
             <FormControlLabel control={<MaterialSwitch checked={showNights} onChange={event => setShowNights(event.target.checked)}/>} label="Show nights"/>
-            <Typography variant="h4" className={classes.locationHeader}>Snoqualmie Pass</Typography>
-            <Forecast pointInfo={{cwa: "SEW", gridX: 151, gridY: 53}} showNights={showNights}/>
+            <LocationSwitch title="Snoqualmie Pass" checked={snoqualmie} setChecked={setSnoqualmie}/>
+            <LocationSwitch title="Crystal Mountain" checked={crystal} setChecked={setCrystal}/>
+            <LocationSwitch title="Stevens Pass" checked={stevens} setChecked={setStevens}/>
+
+            {snoqualmie && (
+              <>
+              <Typography variant="h4" className={classes.locationHeader}>Snoqualmie Pass</Typography>
+              <Forecast pointInfo={{cwa: "SEW", gridX: 151, gridY: 53}} showNights={showNights}/>
+              </>
+            )}
             
-            <Typography variant="h4" className={classes.locationHeader}>Crystal</Typography>
-            <Forecast pointInfo={{cwa: "SEW", gridX: 144, gridY: 30}} showNights={showNights}/>
+            {crystal && (
+              <>
+              <Typography variant="h4" className={classes.locationHeader}>Crystal Mountain</Typography>
+              <Forecast pointInfo={{cwa: "SEW", gridX: 144, gridY: 30}} showNights={showNights}/>
+              </>
+            )}
+
+            {stevens && (
+              <>
+              <Typography variant="h4" className={classes.locationHeader}>Stevens Pass</Typography>
+              <Forecast pointInfo={{cwa: "SEW", gridX: 164, gridY: 66}} showNights={showNights}/>
+              </>
+            )}
+
           </Route>
         </Switch>
       </div>
