@@ -34,6 +34,7 @@ const App = () => {
   const [snoqualmie, setSnoqualmie] = React.useState<boolean>(true);
   const [crystal, setCrystal] = React.useState<boolean>(false);
   const [stevens, setStevens] = React.useState<boolean>(false);
+  const [baker, setBaker] = React.useState<boolean>(false);
 
   const LocationSwitch = (props:{
     title: string,
@@ -74,6 +75,7 @@ const App = () => {
             <LocationSwitch title="Snoqualmie Pass" checked={snoqualmie} setChecked={setSnoqualmie}/>
             <LocationSwitch title="Crystal Mountain" checked={crystal} setChecked={setCrystal}/>
             <LocationSwitch title="Stevens Pass" checked={stevens} setChecked={setStevens}/>
+            <LocationSwitch title="Baker" checked={baker} setChecked={setBaker}/>
 
             {snoqualmie && (
               <>
@@ -93,6 +95,13 @@ const App = () => {
               <>
               <Typography variant="h4" className={classes.locationHeader}>Stevens Pass</Typography>
               <Forecast pointInfo={{cwa: "SEW", gridX: 164, gridY: 66}} showNights={showNights}/>
+              </>
+            )}
+
+            {baker && (
+              <>
+              <Typography variant="h4" className={classes.locationHeader}>Baker</Typography>
+              <Forecast pointInfo={{cwa: "SEW", gridX: 156, gridY: 122}} showNights={showNights}/>
               </>
             )}
 
