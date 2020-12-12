@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import PointInfo from '../models/pointInfo';
 import { ForecastData, ForecastFullDay, ForecastPeriod } from '../models/forecasts';
 import { Table, TableContainer, Paper, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import LocationState from '../models/locationState';
+import { observer } from 'mobx-react';
 
 const PrevSnowfallView = (props:{
   day: ForecastFullDay
@@ -47,28 +49,18 @@ const ForecastPeriodView = (props:{
   );
 }
 
-const Forecast = (props:{
-  pointInfo: PointInfo,
+const Forecast = observer((props:{
+  location:LocationState,
   showNights?: boolean
 }) => {
-  const [forecast, setForecast] = React.useState<ForecastData | undefined>();
-  const [error, setError] = React.useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    const loadAsync = async () => {
-      try {
-        setForecast(await ForecastData.getAsync(props.pointInfo));
-      } catch {
-        setError("Failed to load");
-      }
-    }
-
-    loadAsync();
-  }, [props.pointInfo]);
+  const loading = props.location.forecastData === undefined && props.location.error === undefined;
+  const forecast = props.location.forecastData;
 
   return (
     <div style={{overflowX: "auto"}}>
-      {error && <p>{error}</p>}
+      {props.location.error && <p>{props.location.error}</p>}
+      {loading && <p>Loading...</p>}
       <TableContainer component={Paper} style={{minWidth: "1200px"}}>
         <Table>
           <TableHead>
@@ -119,6 +111,6 @@ const Forecast = (props:{
       </TableContainer>
     </div>
   );
-}
+});
 
 export default Forecast;

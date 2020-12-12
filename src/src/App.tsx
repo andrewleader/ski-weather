@@ -11,6 +11,9 @@ import { makeStyles, AppBar, Toolbar, IconButton, Typography, Switch as Material
 import MenuIcon from '@material-ui/icons/Menu';
 import FindGrid from './components/FindGrid';
 import Forecast from './components/Forecast';
+import { observer } from 'mobx-react';
+import HomeState from './models/homeState';
+import LocationState from './models/locationState';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,8 +30,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const App = () => {
+const App = observer(() => {
   const classes = useStyles();
+  const state = HomeState.current;
 
   const [showNights, setShowNights] = React.useState<boolean>(false);
   const [snoqualmie, setSnoqualmie] = React.useState<boolean>(true);
@@ -36,15 +40,17 @@ const App = () => {
   const [stevens, setStevens] = React.useState<boolean>(false);
   const [baker, setBaker] = React.useState<boolean>(false);
 
-  const LocationSwitch = (props:{
-    title: string,
-    checked: boolean,
-    setChecked: (b:boolean) => void
+  const LocationSwitch = observer((props:{
+    location:LocationState
   }) => {
+    const onChange = (event:any) => {
+      props.location.setShown(event.target.checked);
+    }
+
     return (
-      <FormControlLabel control={<MaterialSwitch checked={props.checked} onChange={event => props.setChecked(event.target.checked)}/>} label={props.title}/>
+      <FormControlLabel control={<MaterialSwitch checked={props.location.shown} onChange={onChange}/>} label={props.location.name}/>
     );
-  }
+  });
 
   return (
     <Router>
@@ -72,44 +78,24 @@ const App = () => {
           </Route>
           <Route path="/">
             <FormControlLabel control={<MaterialSwitch checked={showNights} onChange={event => setShowNights(event.target.checked)}/>} label="Show nights"/>
-            <LocationSwitch title="Snoqualmie Pass" checked={snoqualmie} setChecked={setSnoqualmie}/>
-            <LocationSwitch title="Crystal Mountain" checked={crystal} setChecked={setCrystal}/>
-            <LocationSwitch title="Stevens Pass" checked={stevens} setChecked={setStevens}/>
-            <LocationSwitch title="Baker" checked={baker} setChecked={setBaker}/>
+            {state.locations.map(location => <LocationSwitch key={location.name} location={location}/>)}
 
-            {snoqualmie && (
+            {state.locations.map(location => (
               <>
-              <Typography variant="h4" className={classes.locationHeader}>Snoqualmie Pass</Typography>
-              <Forecast pointInfo={{cwa: "SEW", gridX: 151, gridY: 53}} showNights={showNights}/>
+                {location.shown && (
+                  <>
+                    <Typography variant="h4" className={classes.locationHeader}>{location.name}</Typography>
+                    <Forecast location={location} showNights={showNights}/>
+                  </>
+                )}
               </>
-            )}
-            
-            {crystal && (
-              <>
-              <Typography variant="h4" className={classes.locationHeader}>Crystal Mountain</Typography>
-              <Forecast pointInfo={{cwa: "SEW", gridX: 144, gridY: 30}} showNights={showNights}/>
-              </>
-            )}
-
-            {stevens && (
-              <>
-              <Typography variant="h4" className={classes.locationHeader}>Stevens Pass</Typography>
-              <Forecast pointInfo={{cwa: "SEW", gridX: 164, gridY: 66}} showNights={showNights}/>
-              </>
-            )}
-
-            {baker && (
-              <>
-              <Typography variant="h4" className={classes.locationHeader}>Baker</Typography>
-              <Forecast pointInfo={{cwa: "SEW", gridX: 156, gridY: 122}} showNights={showNights}/>
-              </>
-            )}
+            ))}
 
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
+});
 
 export default App;
