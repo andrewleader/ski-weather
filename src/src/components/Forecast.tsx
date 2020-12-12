@@ -52,10 +52,15 @@ const Forecast = (props:{
   showNights?: boolean
 }) => {
   const [forecast, setForecast] = React.useState<ForecastData | undefined>();
+  const [error, setError] = React.useState<string | undefined>(undefined);
 
   useEffect(() => {
     const loadAsync = async () => {
-      setForecast(await ForecastData.getAsync(props.pointInfo));
+      try {
+        setForecast(await ForecastData.getAsync(props.pointInfo));
+      } catch {
+        setError("Failed to load");
+      }
     }
 
     loadAsync();
@@ -63,19 +68,20 @@ const Forecast = (props:{
 
   return (
     <div style={{overflowX: "auto"}}>
+      {error && <p>{error}</p>}
       <TableContainer component={Paper} style={{minWidth: "1200px"}}>
         <Table>
           <TableHead>
             <TableRow>
               {forecast?.days.map(day => (
-                <TableCell><strong>{day.name}</strong></TableCell>
+                <TableCell key={day.name}><strong>{day.name}</strong></TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             <TableRow>
               {forecast?.days.map(day => (
-                <TableCell>
+                <TableCell key={day.name}>
                   <PrevSnowfallView day={day}/>
                 </TableCell>
               ))}
@@ -84,7 +90,7 @@ const Forecast = (props:{
               <>
                 <TableRow>
                   {forecast?.days.map(day => (
-                    <TableCell>
+                    <TableCell key={day.name}>
                       {day.day && (
                         <ForecastPeriodView period={day.day}/>
                       )}
@@ -93,7 +99,7 @@ const Forecast = (props:{
                 </TableRow>
                 <TableRow>
                   {forecast?.days.map(day => (
-                    <TableCell>
+                    <TableCell key={day.name}>
                       <ForecastPeriodView period={day.night}/>
                     </TableCell>
                   ))}
@@ -102,7 +108,7 @@ const Forecast = (props:{
             ) : (
               <TableRow>
                 {forecast?.days.map(day => (
-                  <TableCell>
+                  <TableCell key={day.name}>
                     <ForecastFullDayView day={day}/>
                   </TableCell>
                 ))}
