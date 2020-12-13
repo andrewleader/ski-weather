@@ -47,10 +47,11 @@ export default class Api {
     if (cached.exists) {
       const cachedAnswer = cached.data() as GridpointForecastProperties;
       const generatedAt = moment(cachedAnswer.generatedAt);
-      if (generatedAt.isAfter(generatedAt.clone().subtract(30, 'm'))) {
+      const now = moment();
+      if (generatedAt.isAfter(now.clone().subtract(30, 'm'))) {
         return cachedAnswer;
       }
-      if (generatedAt.isAfter(generatedAt.clone().subtract(6, 'h'))) {
+      if (generatedAt.isAfter(now.clone().subtract(6, 'h'))) {
         cachedWorstCase = cachedAnswer;
       }
     }
