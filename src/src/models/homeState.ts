@@ -14,6 +14,8 @@ export default class HomeState {
     new LocationState("Snoqualmie Pass", {cwa: "SEW", gridX: 151, gridY: 53}, true),
     new LocationState("Crystal Mountain", {cwa: "SEW", gridX: 144, gridY: 30}, false),
     new LocationState("Stevens Pass", {cwa: "SEW", gridX: 164, gridY: 66}, false),
-    new LocationState("Baker", {cwa: "SEW", gridX: 156, gridY: 122}, false)
+    new LocationState("Baker", {cwa: "SEW", gridX: 156, gridY: 122}, false),
+    new LocationState("Camp Muir (6,500')", {cwa: "SEW", gridX: 135, gridY: 26}, false),
+    new LocationState("Camp Muir (9,500')", {cwa: "SEW", gridX: 135, gridY: 27}, false)
   ];
 }
